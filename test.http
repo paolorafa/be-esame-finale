@@ -1,0 +1,78 @@
+POST HTTP://localhost:5050/products/create HTTP/1.1s
+Content-Type: application/json
+
+{
+    "nameProduct": "iphon",
+    "description": "il piu bello del mondo",
+    "price": 450,
+    "category":"653a81b548659131393d14c3",
+    "image": "https://www.telefonino.net/app/uploads/2021/09/iPhone-13-sfondo.jpg",
+    "scount": "sconto"
+}
+
+####
+PATCH  HTTP://localhost:5050/products/update/653906e90c38f396e4631db9 HTTP/1.1s
+Content-Type: application/json
+    
+{
+    "nameProduct": "franco",
+    "description": "ole",
+    "price": 98
+    
+}
+
+####
+GET HTTP://localhost:5050/products HTTP/1.1s
+
+####
+DELETE HTTP://localhost:5050/products/delete/6539037e0c38f396e4631daa
+
+####
+POST HTTP://localhost:5050/providers/create HTTP/1.1s
+Content-Type: application/json
+
+{
+    "name": "paolo",
+    "lastname": "pellegrino",
+    "email": "p.pellegrino@gmail.com",
+    "password": "ciao99",
+    "socity": "rossoree",
+    "role": "admin"
+
+}
+
+####
+POST HTTP://localhost:5050/category/create HTTP/1.1s
+Content-Type: application/json
+
+{
+    "category": "cellulari"
+    
+}
+####
+
+POST HTTP://localhost:5050/client/create HTTP/1.1s
+Content-Type: application/json
+
+{
+    "name": "paolo",
+    "lastname": "pellegrino",
+    "email": "p.pellegrino@gmail.com",
+    "password": "ciao99",
+    "role": "user"
+
+}
+
+####
+POST HTTP://localhost:5050/basket/create HTTP/1.1s
+Content-Type: application/json
+
+{
+    "userId": "653a8af1f5823b77a3206c83",
+    "productId": "653a899981bbcbe56e716fe8"
+    }
+   
+
+
+####
+GET  HTTP://localhost:5050/basket HTTP/1.1s
