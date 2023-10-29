@@ -3,8 +3,11 @@ const products = express.Router();
 const multer = require('multer')
 const cloudinary = require('cloudinary').v2
 const { CloudinaryStorage } = require('multer-storage-cloudinary')
-require('dotenv').config();
+const validateToken= require ('../middlewars/validateLoginProvider')
 const ProductModel = require('../modules/product')
+
+
+require('dotenv').config();
 
 
 cloudinary.config({
@@ -120,7 +123,7 @@ products.delete('/products/delete/:id', async (req, res) => {
     }
 })
 
-products.get('/products', async (req, res) => {
+products.get('/products', validateToken,  async (req, res, next) => {
     try {
         const product = await ProductModel.find()
         .populate('category')
@@ -137,5 +140,7 @@ products.get('/products', async (req, res) => {
     }
 
 })
+
+
 
 module.exports = products

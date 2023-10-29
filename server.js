@@ -5,13 +5,15 @@ const categoryRoute = require('./routers/categoryRouter')
 const providerRoute = require('./routers/providersRouter')
 const basketRoute= require('./routers/basketRouter')
 const clientRoute= require('./routers/clientRouter')
-
+const loginProviderRoute = require('./routers/loginProvider')
+const loginClientRoute = require ('./routers/loginClient')
 const cors= require('cors')
 require('dotenv').config();
 
 const PORT = 5050;
 
 const app = express()
+
 
 app.use(cors())
 app.use(express.json());
@@ -20,6 +22,8 @@ app.use('/', categoryRoute)
 app.use('/', providerRoute)
 app.use('/', basketRoute)
 app.use('/', clientRoute)
+app.use('/', loginProviderRoute)
+app.use('/', loginClientRoute)
 
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,

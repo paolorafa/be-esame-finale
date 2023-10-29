@@ -24,6 +24,13 @@ const SupplierSchema = mongoose.Schema ({
     role: {
         type: String
         
+    },
+    isVerified: {
+        type: Boolean,
+        default: false 
+    },
+    secretCode: {
+        type: String 
     }
 }, {timestamps: true, srtict: true})
 

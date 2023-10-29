@@ -1,9 +1,46 @@
 const express = require('express');
 const provider = express.Router();
 const bcrypt = require('bcrypt');
-const ProviderModel = require('../modules/editorProviders')
+const crypto = require('crypto');
+const ProviderModel = require('../modules/editorProviders');
+const { default: mongoose } = require('mongoose');
+const nodemailer = require('nodemailer');
 
-provider.post('/providers/create',  async (req, res,) => {
+
+provider.post('/providers/create', async (req, res,) => {
+    const sendSecretCode = (email, secretCode) => {
+        return new Promise((resolve, reject) => {
+            const transporter = nodemailer.createTransport({
+                host: 'smtp.ethereal.email',
+                port: 587,
+                auth: {
+                    user: 'ronaldo.hand@ethereal.email',
+                    pass: 'QEX2yW8wJax4ut3A4t'
+                }
+            });
+            const mailOptions = {
+                from: 'tuoindirizzoemail@gmail.com',
+                to: email,
+                subject: 'Codice Segreto di Conferma',
+                text: `Il tuo codice segreto di conferma è: ${secretCode}`,
+            };
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email inviata: ');
+                    resolve();
+                }
+            });
+
+
+        })
+    }
+
+    const generateSecretCode = () => {
+        return crypto.randomBytes(32).toString("hex");
+    }
+
 
     try {
         const salt = await bcrypt.genSalt(10)
@@ -19,20 +56,27 @@ provider.post('/providers/create',  async (req, res,) => {
         })
         const provide = await newProvider.save();
         console.log(provide);
+        const secretCode = generateSecretCode();
 
-        if (req.body && req.body.role === 'admin') {
-            res.status(201).send({
-                statuscode: 201,
-                message: "fornitore registrato",
-                provide
+        provide.secretCode = secretCode;
+        await provide.save();
+
+
+
+        sendSecretCode(provide.email, secretCode)
+            .then(() => {
+                console.log('codice inviato');
             })
+            .catch((error) => {
+                console.error('Errore nell\'invio del codice segreto:', error);
+                res.status(500).json({ message: 'Errore nell\'invio del codice segreto via email' });
+            });
 
-        } else {
-            res.status(403).send('Accesso negato');
-        }
+
+
     } catch (error) {
         res.status(500).send({
-            message:'Errore durante la registrazione del fornitore',
+            message: 'Errore durante la registrazione del fornitore',
             error: error
         })
 
@@ -41,4 +85,39 @@ provider.post('/providers/create',  async (req, res,) => {
 
 
 
+provider.post('/verifycode', async (req, res) => {
+    const { secretCode } = req.body;
+    console.log(secretCode);
+
+
+    try {
+        console.log('Codice ricevuto:', secretCode);
+        const cleanSecretCode= req.body.secretCode.trim()
+        const provider = await ProviderModel.findOne({ secretCode: cleanSecretCode });
+        console.log(provider);
+        if (!provider) {
+            console.log('Nessun fornitore trovato per questo codice:', secretCode);
+            return res.status(404).send({
+                message: "Fornitore non trovato",
+                statuscode: 404
+            });
+        }
+
+        
+        if (provider.secretCode === secretCode) {
+            provider.isVerified = true
+
+            await provider.save()
+            return res.status(201).send({ message: 'codice verificato' })
+        }
+        else {
+            return res.status(409).send({ message: 'codice non corretto' })
+        }
+
+    } catch (error) {
+        console.error("Errore nella verifica del codice:", error);
+        return res.status(500).send({ message: 'Errore nella verifica del codice' });
+    }
+
+})
 module.exports = provider
