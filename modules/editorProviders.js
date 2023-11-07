@@ -22,8 +22,11 @@ const SupplierSchema = mongoose.Schema ({
         type: String
     },
     role: {
+        type: String,
+        default:"admin"
+    },
+    image:{
         type: String
-        
     },
     isVerified: {
         type: Boolean,

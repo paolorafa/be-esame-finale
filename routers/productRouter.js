@@ -2,8 +2,9 @@ const express = require('express');
 const products = express.Router();
 const multer = require('multer')
 const cloudinary = require('cloudinary').v2
-const { CloudinaryStorage } = require('multer-storage-cloudinary')
-const validateToken= require ('../middlewars/validateLoginProvider')
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const validateLoginProvider = require('../middlewars/validateLoginProvider');
+
 const ProductModel = require('../modules/product')
 
 
@@ -29,7 +30,7 @@ const cloudStorage = new CloudinaryStorage({
 const cloudUpload = multer({ storage: cloudStorage })
 products.post('/products/cloudUpload', cloudUpload.single('image'), async (req, res) => {
     try {
-        res.statusCode(200).json({
+        res.status(200).json({
             image: req.file.path
         })
     } catch (err) {
@@ -48,6 +49,7 @@ products.post('/products/create', async (req, res) => {
         price: req.body.price,
         category: req.body.category,
         image: req.body.image,
+        quantity: req.body.quantity,
         scount: req.body.scout
     })
     try {
@@ -123,10 +125,10 @@ products.delete('/products/delete/:id', async (req, res) => {
     }
 })
 
-products.get('/products', validateToken,  async (req, res, next) => {
+products.get('/products', async (req, res, next) => {
     try {
         const product = await ProductModel.find()
-        .populate('category')
+            .populate('category')
 
         res.status(200).send({
             statuscode: 200,
@@ -136,6 +138,65 @@ products.get('/products', validateToken,  async (req, res, next) => {
         res.status(500).send({
             statuscode: 500,
             message: "errore interno del server"
+        })
+    }
+
+})
+products.get('/products/:id', async (req, res, next) => {
+    const { id } = req.params;
+    if (!id) {
+        return res.status(400).send({
+            statuscode: 400,
+            message: "L'ID del prodotto non è stato fornito correttamente"
+        });
+    }
+    try {
+        const product = await ProductModel.findById(id).populate('category');
+        console.log(product);
+
+        if (!product) {
+            return res.status(404).send({
+                statuscode: 404,
+                message: "Prodotto non trovato"
+            });
+        }
+
+        res.status(200).send({
+            statuscode: 200,
+            product: product
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({
+            statuscode: 500,
+            message: "Errore interno del server"
+        });
+    }
+});
+
+products.get('/products/category/:_id', async (req, res) => {
+     const { _id } = req.params
+     console.log(_id);
+
+    try {
+        const product = await ProductModel.find({_id })
+        if (!product) {
+            return res.status(404).json({
+                statuscode: 404,
+                message: 'Product not found',
+                
+            });
+        } res.status(200).send({
+            statuscode: 200,
+            message: 'Product successfully ',
+            prodotti:product
+        })
+
+    } catch (error) {
+        res.status(500).send({
+            statuscode: 500,
+            message: 'error retrivieng products',
+            error: error
         })
     }
 

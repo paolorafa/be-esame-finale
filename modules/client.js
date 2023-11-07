@@ -17,6 +17,9 @@ const ClientSchema = mongoose.Schema({
         type: String,
         required: true,
         min: 6
+    }, 
+    image: {
+        type: String
     },
     role: {
         type: String,

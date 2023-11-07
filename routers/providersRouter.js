@@ -4,9 +4,41 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const ProviderModel = require('../modules/editorProviders');
 const { default: mongoose } = require('mongoose');
+const multer = require('multer')
+const cloudinary = require('cloudinary').v2
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const nodemailer = require('nodemailer');
 
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARI_CLUOD_NAME,
+    api_key: process.env.CLOUDINARI_API_KEY,
+    api_secret: process.env.CLOUDINARI_API_SECRET
 
+})
+
+const cloudStorage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'cartellaEcommerceProvider',
+        format: async (req, file) => 'png',
+        public_id: (req, file) => file.name
+
+    }
+})
+const cloudUpload = multer({ storage: cloudStorage })
+provider.post('/providers/cloudUpload', cloudUpload.single('image'), async (req, res) => {
+    try {
+        res.status(200).json({
+            image: req.file.path
+        })
+    } catch (err) {
+        res.status(500).send({
+            statuscode: 500,
+            message: 'error creating product',
+            error: err
+        })
+    }
+})
 provider.post('/providers/create', async (req, res,) => {
     const sendSecretCode = (email, secretCode) => {
         return new Promise((resolve, reject) => {
@@ -51,7 +83,8 @@ provider.post('/providers/create', async (req, res,) => {
             email: req.body.email,
             password: hashedPassword,
             socity: req.body.socity,
-            role: req.body.role
+            role: req.body.role,
+            image:req.body.image
 
         })
         const provide = await newProvider.save();

@@ -1,9 +1,6 @@
 const jwt = require('jsonwebtoken')
 require('dotenv').config();
 
-
-
-
 module.exports = (req, res, next) => {
 
 
@@ -21,8 +18,6 @@ module.exports = (req, res, next) => {
     try {
         //verifico il token
         const veriedToken = jwt.verify(tokenProvider, process.env.JWT_SECRET_KEY);
-       
-     
         req.user=veriedToken
         next()
       

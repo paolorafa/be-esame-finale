@@ -19,6 +19,31 @@ category.get('/category', async (req, res) => {
     }
 })
 
+category.get('/category/:id', async (req, res) => {
+    const {id}= req.params;
+    const categoryExists = await CategoryModel.findById(id);
+
+    if (!categoryExists){
+        return res.status(404)({
+            statuscode: 404,
+            message: 'The category does not exist'
+        })
+    }
+    try {
+        const category = await CategoryModel.find()
+
+        res.status(200).send({
+            statuscode: 200,
+            category: category
+        })
+    } catch (err) {
+        res.status(500).send({
+            statuscode: 500,
+            message: 'errore interno del server'
+        })
+    }
+})
+
 category.post('/category/create', async (req, res) => {
     const newCategory = new CategoryModel({
         category: req.body.category

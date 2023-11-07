@@ -5,13 +5,13 @@ Content-Type: application/json
     "nameProduct": "iphon",
     "description": "il piu bello del mondo",
     "price": 450,
-    "category":"653a81b548659131393d14c3",
+    "category":"65423fc8ce8e84dfc11748ca",
     "image": "https://www.telefonino.net/app/uploads/2021/09/iPhone-13-sfondo.jpg",
     "scount": "sconto"
 }
 
 ####
-PATCH  HTTP://localhost:5050/products/update/653906e90c38f396e4631db9 HTTP/1.1s
+PATCH  HTTP://localhost:5050/products/update/65441329efbdba3404b8750c HTTP/1.1s
 Content-Type: application/json
     
 {
@@ -24,10 +24,13 @@ Content-Type: application/json
 ####
 GET HTTP://localhost:5050/products HTTP/1.1s
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1M2JlZTBmMWRhYmVmN2E2NGQ2ZTk1NSIsIm5hbWUiOiJwYW9sbyIsImxhc3RuYW1lIjoicGVsbGVncmlubyIsImVtYWlsIjoicEBnbWFpbC5jb20iLCJzb2NpdHkiOiJyb3Nzb3JlZSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY5ODQyNzA2MSwiZXhwIjoxNjk4Njg2MjYxfQ.ANf9F2l6qj-KAyP6KzusmpxM8_1brqkJZ7g2BITcwt8
-
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NDI4OWIxMTI4YjYxOTBlZTIwYTU2NSIsIm5hbWUiOiJwYW9sbyIsImxhc3RuYW1lIjoicGVsbGVncmlubyIsImVtYWlsIjoicEBnbWFpbC5jb20iLCJzb2NpdHkiOiJyb3Nzb3JlZSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY5ODg1OTQ5OSwiZXhwIjoxNjk5MTE4Njk5fQ.Y4dVEIPe_T3Bnp1WAsHo5obg-9fS-ViTgBrUg_85wh0
 ####
 DELETE HTTP://localhost:5050/products/delete/6539037e0c38f396e4631daa
+
+####
+GET HTTP://localhost:5050/products/category/65423fc8ce8e84dfc11748ca HTTP/1.1s
+Content-Type: application/json
 
 ####
 POST HTTP://localhost:5050/providers/create HTTP/1.1s
@@ -103,5 +106,9 @@ POST HTTP://localhost:5050/verifycode HTTP/1.1s
 Content-Type: application/json
 
 {
-    "secretCode": "c890815c1a23776cb621a25d41fb162ef53e8523b2272af3980a3f3bfa01284e"
+    "secretCode": "9c98d48916c2e7119906596c0f2cfae0a947354b41b8eac0b802831c0b00a288"
 }
+
+####
+GET  HTTP://localhost:5050/products/65423fc8ce8e84dfc11748ca HTTP/1.1s
+Content-Type: application/json
