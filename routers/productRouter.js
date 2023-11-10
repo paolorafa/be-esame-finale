@@ -70,36 +70,37 @@ products.post('/products/create', async (req, res) => {
 
 products.patch('/products/update/:id', async (req, res) => {
     const { id } = req.params;
-    const productExists = await ProductModel.findById(id);
+    const productExists = await ProductModel.findById(id).populate('category');
 
     if (!productExists) {
-        return res.status(404)({
+        return res.status(404).json({
             statuscode: 404,
             message: 'Product not found'
-        })
+        });
     }
 
     try {
         const productToUpdate = req.body;
         const options = {
             new: true
-        }
+        };
 
-        const result = await ProductModel.findByIdAndUpdate(id, productToUpdate, options)
+        const result = await ProductModel.findByIdAndUpdate(id, productToUpdate, options);
         console.log(result);
-        res.status(200).send({
+        res.status(200).json({
             statuscode: 200,
             message: 'Product updated successfully',
             result
-        })
+        });
     } catch (err) {
-        res.status(500).send({
+        res.status(500).json({
             statuscode: 500,
-            message: 'error upload product',
+            message: 'Error updating product',
             error: err
-        })
+        });
     }
-})
+});
+
 
 products.delete('/products/delete/:id', async (req, res) => {
     const { id } = req.params;
@@ -174,12 +175,12 @@ products.get('/products/:id', async (req, res, next) => {
     }
 });
 
-products.get('/products/category/:_id', async (req, res) => {
-     const { _id } = req.params
-     console.log(_id);
+products.get('/products/category/:category', async (req, res) => {
+     const { category } = req.params
+     console.log(category);
 
     try {
-        const product = await ProductModel.find({_id })
+        const product = await ProductModel.find({category }).populate('category')
         if (!product) {
             return res.status(404).json({
                 statuscode: 404,

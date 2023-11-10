@@ -32,6 +32,7 @@ loginClient.post('/loginclient', async (req, res) => {
         name: client.name,
         lastname: client.lastname,
         email: client.email,
+        image: client.image,
         role: client.role
     }, process.env.JWT_SECRET_KEY_CLIENT, {
         expiresIn: '72h'
@@ -44,5 +45,37 @@ loginClient.post('/loginclient', async (req, res) => {
     })
 
 })
+loginClient.get('/loginclient/:id', async (req, res, next) => {
+    const { id } = req.params;
+    console.log(id);
+    if (!id) {
+        return res.status(400).send({
+            statuscode: 400,
+            message: "L'ID del cliente non è stato fornito correttamente"
+        });
+    }
+    try {
+        const client = await ClientModel.findById(id);
+        console.log(client);
+
+        if (!client) {
+            return res.status(404).send({
+                statuscode: 404,
+                message: "Prodotto non trovato"
+            });
+        }
+
+        res.status(200).send({
+            statuscode: 200,
+            client: client
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({
+            statuscode: 500,
+            message: "Errore interno del server"
+        });
+    }
+});
 
 module.exports= loginClient

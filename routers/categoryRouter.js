@@ -32,9 +32,11 @@ category.get('/category/:id', async (req, res) => {
     try {
         const category = await CategoryModel.find()
 
+        console.log(category);
         res.status(200).send({
             statuscode: 200,
-            category: category
+            category: category,
+            
         })
     } catch (err) {
         res.status(500).send({
