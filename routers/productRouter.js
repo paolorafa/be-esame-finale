@@ -127,12 +127,18 @@ products.delete('/products/delete/:id', async (req, res) => {
 })
 
 products.get('/products', async (req, res, next) => {
+    const {page=1, pageSize=3}=req.query
     try {
         const product = await ProductModel.find()
-            .populate('category')
+            .populate('category').limit(pageSize).skip((page-1)*pageSize)
+
+            const totalProduct = await ProductModel.count()
 
         res.status(200).send({
             statuscode: 200,
+            currentPage: Number(page),
+            totalPage: Math.ceil(totalProduct/pageSize),
+            totalProduct,
             product: product
         })
     } catch (err) {

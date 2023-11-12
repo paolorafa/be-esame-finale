@@ -3,10 +3,11 @@ const loginClient = express.Router()
 const bcrypt = require('bcrypt')
 const ClientModel = require('../modules/client')
 const jwt = require('jsonwebtoken')
+const authenticateUser = require ('../middlewars/authenticateUser')
 require('dotenv').config()
 
 
-loginClient.post('/loginclient', async (req, res) => {
+loginClient.post('/loginclient',authenticateUser, async (req, res) => {
     const client = await ClientModel.findOne({ email: req.body.email })
    
 

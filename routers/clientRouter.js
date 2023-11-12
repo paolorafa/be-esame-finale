@@ -5,7 +5,7 @@ const ClientModel = require('../modules/client')
 const multer = require('multer')
 const cloudinary = require('cloudinary').v2
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
-
+const validateUser = require ('../middlewars/validateUser')
 
 
 
@@ -46,7 +46,7 @@ client.post('/client/cloudUpload', cloudUpload.single('image'), async (req, res)
 
 
 
-client.post('/client/create', async (req, res,) => {
+client.post('/client/create',validateUser, async (req, res,) => {
 
     try {
         const salt = await bcrypt.genSalt(10)
