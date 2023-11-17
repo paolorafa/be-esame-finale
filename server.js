@@ -9,6 +9,7 @@ const loginClientRoute = require ('./routers/loginClient')
 const githubRoute=require('./routers/gitHub')
 const resetRoute= require('./routers/resetPassword')
 const commentRoute = require('./routers/commentRouter')
+
 const cors= require('cors')
 require('dotenv').config();
 
@@ -31,10 +32,42 @@ app.use('/', githubRoute)
 app.use('/', resetRoute)
 app.use('/', commentRoute)
 
+
+const stripe = require('stripe')(`${process.env.STRIPE_KEY}`); 
+
+
+
+
+app.post('/create-payment-intent', async (req, res) => {
+  const { amount, currency, payment_method_types } = req.body;
+
+  try {
+   
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount,
+      currency,
+      payment_method_types,
+    });
+
+    
+    res.json({ clientSecret: paymentIntent.client_secret });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.listen(3000, () => {
+  console.log('Server running on port 3000');
+});
+
+
+
+
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
+
 
 
 const db = mongoose.connection;
