@@ -8,13 +8,15 @@ const ProductSchema = mongoose.Schema({
         type: String
     },
     price: {
-        type: Number
+        type: Number,
+        require
     },
     category: {
         type: mongoose.Schema.Types.ObjectId, ref: 'categoryModel',
     },
     image: {
-        type: String
+        type: String,
+        require
     },
     quantity:{
         type:Number

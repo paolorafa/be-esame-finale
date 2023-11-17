@@ -14,9 +14,7 @@ const validatePost = (req, res, next) => {
     if (typeof password !== 'string') {
         errors.push('la password deve essere una stringa')
     }
-    if (typeof image!== 'string') {
-        errors.push('la immagine deve essere una stringa')
-    }
+    
 
     if (errors.length > 0) {
         res.status(400).send({ errors })

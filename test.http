@@ -19,7 +19,7 @@ Content-Type: application/json
 }
 
 ####
-GET HTTP://localhost:5050/products/65495c726f8f8d0c797faf15 HTTP/1.1s
+GET HTTP://localhost:5050/products HTTP/1.1s
 
 ####
 GET HTTP://localhost:5050/products HTTP/1.1s
@@ -36,18 +36,19 @@ GET HTTP://localhost:5050/category/65423fc8ce8e84dfc11748ca HTTP/1.1s
 Content-Type: application/json
 
 ####
-POST HTTP://localhost:5050/providers/create HTTP/1.1s
+POST HTTP://localhost:5050/products/65551044d7016d0e5aee9285/comments/create HTTP/1.1s
 Content-Type: application/json
 
 {
-    "name": "paolo",
-    "lastname": "pellegrino",
-    "email": "p@gmail.com",
-    "password": "ciao99",
-    "socity": "rossoree",
-    "role": "admin"
+    "comment": "circo",
+    "client": "655547ef3d12484d6be36a40",
+    "productId": "65551044d7016d0e5aee9285"
 
 }
+####
+GET HTTP://localhost:5050/commenst/products/655515fe76f1864949cf7c7d HTTP/1.1s
+Content-Type: application/json
+
 
 ####
 POST HTTP://localhost:5050/category/create HTTP/1.1s

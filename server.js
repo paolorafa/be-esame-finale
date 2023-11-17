@@ -8,6 +8,7 @@ const loginProviderRoute = require('./routers/loginProvider')
 const loginClientRoute = require ('./routers/loginClient')
 const githubRoute=require('./routers/gitHub')
 const resetRoute= require('./routers/resetPassword')
+const commentRoute = require('./routers/commentRouter')
 const cors= require('cors')
 require('dotenv').config();
 
@@ -28,6 +29,7 @@ app.use('/', loginProviderRoute)
 app.use('/', loginClientRoute)
 app.use('/', githubRoute)
 app.use('/', resetRoute)
+app.use('/', commentRoute)
 
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,

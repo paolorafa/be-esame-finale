@@ -127,28 +127,26 @@ products.delete('/products/delete/:id', async (req, res) => {
 })
 
 products.get('/products', async (req, res, next) => {
-    const {page=1, pageSize=3}=req.query
-    try {
-        const product = await ProductModel.find()
-            .populate('category').limit(pageSize).skip((page-1)*pageSize)
+    const { page = 1, pageSize = 3 } = req.query;
 
-            const totalProduct = await ProductModel.count()
+    try {
+        const product = await ProductModel.find().populate('category');
+        const totalProduct = await ProductModel.count();
 
         res.status(200).send({
             statuscode: 200,
             currentPage: Number(page),
-            totalPage: Math.ceil(totalProduct/pageSize),
+            totalPage: Math.ceil(totalProduct / pageSize),
             totalProduct,
             product: product
-        })
+        });
     } catch (err) {
         res.status(500).send({
             statuscode: 500,
             message: "errore interno del server"
-        })
+        });
     }
-
-})
+});
 products.get('/products/:id', async (req, res, next) => {
     const { id } = req.params;
     if (!id) {
@@ -167,7 +165,7 @@ products.get('/products/:id', async (req, res, next) => {
                 message: "Prodotto non trovato"
             });
         }
-
+console.log(product);
         res.status(200).send({
             statuscode: 200,
             product: product
